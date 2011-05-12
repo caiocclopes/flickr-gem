@@ -1,0 +1,55 @@
+<%= form_for(@flickr_config) do |f| %>
+  <% if @flickr_config.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@flickr_config.errors.count, "error") %> prohibited this flickr_config from being saved:</h2>
+
+      <ul>
+      <% @flickr_config.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  </div>
+  <div class="field">
+    <%= f.label :area_id %><br />
+    <%= f.text_field :area_id %>
+  </div>
+ Se a busca precisa de um user_id, inserir email ou username
+ 	<div class="field">
+    <%= f.label :people %><br />
+    <%= f.select :people, ([["-","-"],["Email","email"],["Username", "username"]]) %>
+  </div>
+	<div class="field">
+    <%= f.label :email_or_username %><br />
+    <%= f.text_field :email_or_username %>
+  </div>
+  Prioridade = 2 , pode ou nao ter dependencia com usuario
+	<div class="field">
+    <%= f.label :photos %><br />
+    <%= f.select :photos, ([["Get Photos","flickr.photos.getPhotos"],["Get Photos Of","flickr.photos.getPhotosOf"],["Get Public Photos","flickr.photos.getPublicPhotos"],["Recently Updated","flickr.photos.recentlyUpdated"], ["Contacts Public Photos","contactsPublicPhotos"],["Untagged","flickr.photos.getUntagged"],["Get Recent","flickr.photos.getRecent"], ["With Geo Data","flickr.photos.getWithGeoData"], ["Without Geo Data","flickr.photos.getWithoutGeoData"],["Search","flickr.photos.search"]]) %>
+  </div>
+Se a escolha for search, digitar o conteudo de busca abaixo 
+ <div class="field">
+    <%= f.label :content %><br />
+    <%= f.text_field :content %>
+  </div>
+As pesquisas serao filtradas por data
+  <div class="field">
+    <%= f.label :minimum_date %><br />
+    <%= f.date_select :minimum_date %>
+  </div>
+  <div class="field">
+    <%= f.label :maximum_date %><br />
+    <%= f.date_select :maximum_date %>
+  </div>
+Numero de resultados por pagina
+  <div class="field">
+    <%= f.label :per_page %><br />
+    <%= f.text_field :per_page %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
