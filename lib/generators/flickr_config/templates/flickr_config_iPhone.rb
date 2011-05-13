@@ -41,7 +41,7 @@ class FlickrController < ApplicationController
           if !cursor.people.eql?("-")  # se foi colocado email or username, serão validados metodos cujo NSID é pedido
             cursor.priority = 1
             cursor.save
-          elsif cursor.photos.eql?("flickr.photos.search") #metodo de busca generica, prioridade 3
+          elsif cursor.photos.eql?("flickr.people.search") #metodo de busca generica, prioridade 3
             cursor.priority = 3
             cursor.save
           else 
@@ -109,7 +109,7 @@ class FlickrController < ApplicationController
      
      when 1
            
-         if cursor.photos.eql?("flickr.photos.getPhotos")
+         if cursor.photos.eql?("flickr.people.getPhotos")
           
            url.api_method = cursor.photos
            url.NSID = cursor.NSID
