@@ -17,7 +17,7 @@ module Flickr
       field :per_page, type: Integer, :default => 10
       validates_presence_of :area_id, :message => "nao pode ser nulo"
       validates_uniqueness_of :area_id, :message => "ja existente"
-      validates_numericality_of :per_page, :greather_than => 0, :less_than => 50, :message => "must be between 1 and 50"
+      validates_numericality_of :per_page, :greather_than => 0, :less_than => 51, :message => "must be between 1 and 50"
  
   end
   
