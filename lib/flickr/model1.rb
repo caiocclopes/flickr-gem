@@ -14,15 +14,11 @@ module Flickr
       field :maximum_date, type: Date
       field :priority, type: Integer
       field :area_id, type: Integer
-      field :per_page, type: Integer
+      field :per_page, type: Integer, :default => 10
       validates_presence_of :area_id, :message => "nao pode ser nulo"
       validates_uniqueness_of :area_id, :message => "ja existente"
-      if !:people.eql?("-")   and (:photos.eql?("flickr.photos.getPhotos") or :photos.eql?("flickr.photos.getPhotosOf") or :photos.eql?("flickr.photos.getPublicPhotos") )
-        validates_presence_of :email_or_username, :message => "nao pode ser nulo"
-      end
-      if :photos.eql?("search")
-      validates_presence_of :content, :message => "nao pode ser nulo"
-      end
+      validates_numericality_of :per_page, :greather_than => 0, :less_than => 50, :message => "must be between 1 and 50"
+ 
   end
   
   end
