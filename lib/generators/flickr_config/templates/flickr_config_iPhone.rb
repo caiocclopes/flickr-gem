@@ -67,14 +67,14 @@ class FlickrController < ApplicationController
               begin
               cursor.NSID = flickr.people.findByEmail(:find_email => cursor.email_or_username).nsid    #metodo flickraw
             rescue 
-              cursor.NSID = "-"
+              cursor.NSID = "erro"
             end
               cursor.save
           else 
             begin
               cursor.NSID = flickr.people.findByUsername(:username => cursor.email_or_username).nsid
             rescue
-               cursor.NSID = "-"
+               cursor.NSID = "erro"
               end
             cursor.save
           end
