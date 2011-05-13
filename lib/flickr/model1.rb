@@ -12,7 +12,7 @@ module Flickr
       field :content
       field :minimum_date, type: Date
       field :maximum_date, type: Date
-      field :priority, type: Integer
+      field :priority,  type: Integer
       field :area_id, type: Integer
       field :per_page, type: Integer, :default => 10
       validates_presence_of :area_id, :message => "nao pode ser nulo"

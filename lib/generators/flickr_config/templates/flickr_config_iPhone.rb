@@ -113,12 +113,12 @@ class FlickrController < ApplicationController
           
            url.api_method = cursor.photos
            url.NSID = cursor.NSID
-           url.extras = [["min_upload_date",(cursor.minimum_date).to_time.to_i],["max_upload_date",(cursor.maximum_date).to_time.to_i],["per_page",cursor.per_page]]
+           url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
            url.save
          else 
            url.api_method = cursor.photos
            url.NSID = cursor.NSID 
-           url.extras = [["per_page",cursor.per_page]]
+           url.extras =[:per_page => cursor.per_page]
            url.save
          end
        
@@ -126,12 +126,12 @@ class FlickrController < ApplicationController
         
         if cursor.photos.eql?("flickr.photos.getRecent")
           url.api_method = cursor.photos
-          url.extras = [["per_page",cursor.per_page]]
+          url.extras = [:per_page => cursor.per_page]
           url.save
           
         elsif cursor.photos.eql?("flickr.photos.recentlyUpdated")
              url.api_method = cursor.photos
-             url.extras = [["per_page",cursor.per_page]]
+             url.extras =[:per_page => cursor.per_page]
              url.min_date = (cursor.minimun_date).to_time.to_i
              url.save
              
@@ -143,15 +143,14 @@ class FlickrController < ApplicationController
         else
             cursor.photos.eql?("getUntagged")
             url.api_method = cursor.photos
-             url.extras = [["min_upload_date",(cursor.minimum_date).to_time.to_i],["max_upload_date",(cursor.maximum_date).to_time.to_i],["per_page",cursor.per_page]]
-             url.save
+             url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
               
         end
         
       when 3
           url.api_method = cursor.photos
           url.text = cursor.content.gsub('+',"%2B").gsub(/ /,"+") #remove espaços em branco e caractere '+'
-          url.extras = [["min_upload_date",(cursor.minimum_date).to_time.to_i],["max_upload_date",(cursor.maximum_date).to_time.to_i],["per_page",cursor.per_page]]
+          url.extras =  [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
           url.save
     end
   end
