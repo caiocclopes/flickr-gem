@@ -113,12 +113,12 @@ class FlickrController < ApplicationController
           
            url.api_method = cursor.photos
            url.NSID = cursor.NSID
-           url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
+           url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page, :user_id => cursor.NSID]
            url.save
          else 
            url.api_method = cursor.photos
            url.NSID = cursor.NSID 
-           url.extras =[:per_page => cursor.per_page]
+           url.extras =[:per_page => cursor.per_page, :user_id => cursor.NSID]
            url.save
          end
        
@@ -135,13 +135,14 @@ class FlickrController < ApplicationController
              url.min_date = (cursor.minimun_date).to_time.to_i
              url.save
              
-        elsif   cursor.photos.eql?("contactsPublicPhotos")
+        elsif   cursor.photos.eql?("flickr.photos.getContactsPublicPhotos")
            url.api_method = cursor.photos
            url.NSID = cursor.NSID
+          url.extras =[:per_page => cursor.per_page, :user_id => cursor.NSID]
            url.save
         
         else
-            cursor.photos.eql?("getUntagged")
+            cursor.photos.eql?("flickr.photos.getUntagged")
             url.api_method = cursor.photos
              url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
               
