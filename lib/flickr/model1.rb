@@ -6,7 +6,7 @@ module Flickr
       field :API_key, :default => "d23c1652652ddc79e37539b481f41415"
       field :shared_secret, :default => "30d085be1b0321e0"
       field :people
-      field :email_or_username
+      field :email_or_username, :default => "-"
       field :NSID
       field :photos
       field :content

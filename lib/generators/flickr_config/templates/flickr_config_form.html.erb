@@ -1,4 +1,27 @@
 <%= form_for(@flickr_config) do |f| %>
+  
+  <script type="text/javascript">
+  function toggleDateSelect(value){
+    
+    if (value == 'flickr.people.getPhotos' || value == 'flickr.photos.getUntagged' || value == 'flickr.photos.getWithGeoData' || value == 'flickr.photos.getWithoutGeoData' || value == 'flickr.photos.search' )
+      	document.getElementById('date_div').style.display = 'block';
+    else
+      	document.getElementById('date_div').style.display = 'none';
+	
+	if(value == 'flickr.photos.search')
+		document.getElementById('search_div').style.display = 'block';
+	else
+		document.getElementById('search_div').style.display = 'none';
+	
+	if(value == 'flickr.people.getPhotos' || value == 'flickr.people.getPhotosOf' || value == 'flickr.people.getPublicPhotos' || value == 'flickr.photos.getContactsPublicPhotos')
+		document.getElementById('user_div').style.display = 'block';
+	else
+		document.getElementById('user_div').style.display = 'none';
+  }
+
+
+  </script>
+  
   <% if @flickr_config.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@flickr_config.errors.count, "error") %> prohibited this flickr_config from being saved:</h2>
@@ -16,25 +39,31 @@
     <%= f.label :area_id %><br />
     <%= f.text_field :area_id %>
   </div>
+	<div class="field">
+    <%= f.label :photos %><br />
+    <%= f.select :photos, ([["Get Photos","flickr.people.getPhotos"],["Get Photos Of","flickr.people.getPhotosOf"],["Get Public Photos","flickr.people.getPublicPhotos"],["Recently Updated","flickr.photos.recentlyUpdated"], ["Contacts Public Photos","flickr.photos.getContactsPublicPhotos"],["Untagged","flickr.photos.getUntagged"],["Get Recent","flickr.photos.getRecent"], ["With Geo Data","flickr.photos.getWithGeoData"], ["Without Geo Data","flickr.photos.getWithoutGeoData"],["Search","flickr.photos.search"]]), {}, :onchange => 'toggleDateSelect(this.options[this.selectedIndex].value);' %>
+  </div>
+<div id="user_div" style="display:block" >
  Se a busca precisa de um user_id, inserir email ou username
  	<div class="field">
     <%= f.label :people %><br />
-    <%= f.select :people, ([["-","-"],["Email","email"],["Username", "username"]]) %>
+    <%= f.select :people, ([["Email","email"],["Username", "username"]]) %>
   </div>
 	<div class="field">
     <%= f.label :email_or_username %><br />
     <%= f.text_field :email_or_username %>
   </div>
-\
-	<div class="field">
-    <%= f.label :photos %><br />
-    <%= f.select :photos, ([["Get Photos","flickr.people.getPhotos"],["Get Photos Of","flickr.people.getPhotosOf"],["Get Public Photos","flickr.people.getPublicPhotos"],["Recently Updated","flickr.photos.recentlyUpdated"], ["Contacts Public Photos","flickr.photos.getContactsPublicPhotos"],["Untagged","flickr.photos.getUntagged"],["Get Recent","flickr.photos.getRecent"], ["With Geo Data","flickr.photos.getWithGeoData"], ["Without Geo Data","flickr.photos.getWithoutGeoData"],["Search","flickr.photos.search"]]) %>
-  </div>
-Se a escolha for search, digitar o conteudo de busca abaixo 
+ </div>
+ 
+<div id="search_div" style="display:none" >
  <div class="field">
+Se a escolha for search, digitar o conteudo de busca abaixo 	
     <%= f.label :content %><br />
     <%= f.text_field :content %>
   </div>
+</div>
+
+<div id="date_div" style="display:block">
 As pesquisas serao filtradas por data
   <div class="field">
     <%= f.label :minimum_date %><br />
@@ -44,6 +73,7 @@ As pesquisas serao filtradas por data
     <%= f.label :maximum_date %><br />
     <%= f.date_select :maximum_date %>
   </div>
+</div>
 Numero de resultados por pagina
   <div class="field">
     <%= f.label :per_page %><br />
@@ -51,5 +81,6 @@ Numero de resultados por pagina
   </div>
   <div class="actions">
     <%= f.submit %>
+    
   </div>
 <% end %>
