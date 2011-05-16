@@ -86,7 +86,7 @@ class FlickrController < ApplicationController
         cursor.save
       end
         posicao += 1 # posicao++
-       cursor = Flickr::Model::FlickrModel.where(NSID: nil)[posicao]
+       cursor = Flickr::Model::FlickrModel.where(NSID: nil )[posicao]
       end
   end
                 
