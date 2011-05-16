@@ -34,14 +34,14 @@ class FlickrController < ApplicationController
 
         # define as prioridades para cada conjunto de métodos
        posicao = 0 
-       cursor = Flickr.getAll[posicao]
+       cursor = Flickr::Model::FlickrModel.where(priority: 0)[posicao]
 
         while cursor != nil # enquanto houver registros
 
           if !cursor.people.eql?("-")  # se foi colocado email or username, serão validados metodos cujo NSID é pedido
             cursor.priority = 1
             cursor.save
-          elsif cursor.photos.eql?("flickr.people.search") #metodo de busca generica, prioridade 3
+          elsif cursor.photos.eql?("flickr.photos.search") #metodo de busca generica, prioridade 3
             cursor.priority = 3
             cursor.save
           else 
@@ -50,7 +50,7 @@ class FlickrController < ApplicationController
           end
 
           posicao += 1 # posicao++
-          cursor = Flickr.getAll[posicao]
+          cursor = Flickr::Model::FlickrModel.where(priority: 0)[posicao]
     end
   end
   
@@ -58,7 +58,7 @@ class FlickrController < ApplicationController
                  # procura em todos os registros se há a necessidade de se obter um NSID, atraves da gem flickraw
                  # em caso de usuario invalido retorna uma exception que é resgatada e implica a um NSID invalido
     posicao = 0 
-    cursor = Flickr.getAll[posicao]
+    cursor = Flickr::Model::FlickrModel.where(NSID: nil)[posicao]
      while cursor != nil # enquanto houver registros
        FlickRaw.api_key = cursor.API_key
        FlickRaw.shared_secret = cursor.shared_secret
@@ -69,6 +69,7 @@ class FlickrController < ApplicationController
             rescue 
               cursor.NSID = "erro"
             end
+              
               cursor.save
           else 
             begin
@@ -76,14 +77,16 @@ class FlickrController < ApplicationController
             rescue
                cursor.NSID = "erro"
               end
+     
             cursor.save
           end
       else 
         cursor.NSID = "-"
+        
         cursor.save
       end
         posicao += 1 # posicao++
-        cursor = Flickr.getAll[posicao]
+       cursor = Flickr::Model::FlickrModel.where(NSID: nil)[posicao]
       end
   end
                 
@@ -113,12 +116,12 @@ class FlickrController < ApplicationController
           
            url.api_method = cursor.photos
            url.NSID = cursor.NSID
-           url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page, :user_id => cursor.NSID]
+           url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i.to_s, :max_upload_date => (cursor.maximum_date).to_time.to_i.to_s, :per_page => cursor.per_page.to_s, :user_id => cursor.NSID]
            url.save
          else 
            url.api_method = cursor.photos
            url.NSID = cursor.NSID 
-           url.extras =[:per_page => cursor.per_page, :user_id => cursor.NSID]
+           url.extras =[:per_page => cursor.per_page.to_s, :user_id => cursor.NSID]
            url.save
          end
        
@@ -126,32 +129,32 @@ class FlickrController < ApplicationController
         
         if cursor.photos.eql?("flickr.photos.getRecent")
           url.api_method = cursor.photos
-          url.extras = [:per_page => cursor.per_page]
+          url.extras = [:per_page => cursor.per_page.to_s]
           url.save
           
         elsif cursor.photos.eql?("flickr.photos.recentlyUpdated")
              url.api_method = cursor.photos
-             url.extras =[:per_page => cursor.per_page]
-             url.min_date = (cursor.minimun_date).to_time.to_i
+             url.extras =[:per_page => cursor.per_page.to_s]
+             url.min_date = (cursor.minimun_date).to_time.to_i.to_s
              url.save
              
         elsif   cursor.photos.eql?("flickr.photos.getContactsPublicPhotos")
            url.api_method = cursor.photos
            url.NSID = cursor.NSID
-          url.extras =[:per_page => cursor.per_page, :user_id => cursor.NSID]
+          url.extras =[:per_page => cursor.per_page.to_s, :user_id => cursor.NSID]
            url.save
         
         else
             cursor.photos.eql?("flickr.photos.getUntagged")
             url.api_method = cursor.photos
-             url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
+             url.extras = [:min_upload_date => (cursor.minimum_date).to_time.to_i.to_s, :max_upload_date => (cursor.maximum_date).to_time.to_i.to_s, :per_page => cursor.per_page.to_s]
               
         end
         
       when 3
           url.api_method = cursor.photos
           url.text = cursor.content.gsub('+',"%2B").gsub(/ /,"+") #remove espaços em branco e caractere '+'
-          url.extras =  [:min_upload_date => (cursor.minimum_date).to_time.to_i, :max_upload_date => (cursor.maximum_date).to_time.to_i, :per_page => cursor.per_page]
+          url.extras =  [:min_upload_date => (cursor.minimum_date).to_time.to_i.to_s, :max_upload_date => (cursor.maximum_date).to_time.to_i.to_s, :per_page => cursor.per_page.to_s]
           url.save
     end
   end
